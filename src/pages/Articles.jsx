@@ -1,5 +1,15 @@
 import React from "react"
-import { Container, Typography, Grid, Card, CardContent, CardMedia, CardActionArea } from "@mui/material"
+import { Container, Typography, Grid, Card, CardContent, CardMedia, CardActionArea, Box } from "@mui/material"
+import { styled } from "@mui/system"
+
+const GradientCard = styled(Card)(({ theme }) => ({
+  backgroundImage: "linear-gradient(120deg, #f0f8ff 0%, #e6f2ff 100%)",
+  transition: "all 0.3s ease-in-out",
+  "&:hover": {
+    transform: "translateY(-8px)",
+    boxShadow: "0 12px 20px rgba(0,0,0,0.1)",
+  },
+}))
 
 const articles = [
   {
@@ -25,14 +35,14 @@ const articles = [
 
 function Articles() {
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h2" gutterBottom>
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }} className="page-transition">
+      <Typography variant="h2" gutterBottom align="center">
         Medical Articles
       </Typography>
       <Grid container spacing={4}>
         {articles.map((article) => (
-          <Grid item key={article.id} xs={12} sm={6} md={4}>
-            <Card>
+          <Grid item key={article.id} xs={12} sm={6} md={4} className="card-animation">
+            <GradientCard>
               <CardActionArea>
                 <CardMedia component="img" height="140" image={article.image} alt={article.title} />
                 <CardContent>
@@ -44,7 +54,7 @@ function Articles() {
                   </Typography>
                 </CardContent>
               </CardActionArea>
-            </Card>
+            </GradientCard>
           </Grid>
         ))}
       </Grid>
