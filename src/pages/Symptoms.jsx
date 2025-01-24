@@ -21,6 +21,8 @@ const GradientPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
   marginBottom: theme.spacing(3),
   borderRadius: theme.spacing(2),
+  background: "rgba(255, 255, 255, 0.1)",
+  backdropFilter: "blur(10px)",
 }))
 
 function Symptoms() {
@@ -53,7 +55,7 @@ function Symptoms() {
   }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }} className="page-transition">
+    <Container maxWidth="md" sx={{ mt: 4, mb: 4, flexGrow: 1 }} className="page-transition">
       <Typography variant="h2" gutterBottom align="center">
         Symptom Checker
       </Typography>
