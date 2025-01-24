@@ -1,17 +1,17 @@
 import React from "react"
-import { Container, Typography, Button, Grid, Paper, Box } from "@mui/material"
+import { Container, Typography, Button, Grid, Paper, Box, useTheme, useMediaQuery } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import { styled } from "@mui/system"
 
 const HeroSection = styled(Box)(({ theme }) => ({
   backgroundImage: "linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%)",
-  padding: theme.spacing(8, 0, 6),
+  padding: theme.spacing(4, 0),
   borderRadius: theme.spacing(2),
   marginBottom: theme.spacing(4),
   textAlign: "center",
   color: theme.palette.common.white,
   [theme.breakpoints.up("md")]: {
-    padding: theme.spacing(12, 0, 10),
+    padding: theme.spacing(8, 0),
   },
 }))
 
@@ -30,6 +30,9 @@ const FeatureCard = styled(Paper)(({ theme }) => ({
 }))
 
 function Home() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+
   return (
     <Box className="page-transition">
       <HeroSection>
@@ -40,14 +43,20 @@ function Home() {
           <Typography variant="h5" paragraph>
             Your trusted online medical consultation platform
           </Typography>
-          <Button variant="contained" color="secondary" component={RouterLink} to="/symptoms" size="large">
+          <Button
+            variant="contained"
+            color="secondary"
+            component={RouterLink}
+            to="/symptoms"
+            size={isMobile ? "medium" : "large"}
+          >
             Check Your Symptoms
           </Button>
         </Container>
       </HeroSection>
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          <Grid item xs={12} md={4} className="card-animation">
+          <Grid item xs={12} sm={6} md={4} className="card-animation">
             <FeatureCard elevation={3}>
               <Typography variant="h5" gutterBottom>
                 Symptom Checker
@@ -58,7 +67,7 @@ function Home() {
               </Button>
             </FeatureCard>
           </Grid>
-          <Grid item xs={12} md={4} className="card-animation">
+          <Grid item xs={12} sm={6} md={4} className="card-animation">
             <FeatureCard elevation={3}>
               <Typography variant="h5" gutterBottom>
                 Premium Consultations
@@ -69,7 +78,7 @@ function Home() {
               </Button>
             </FeatureCard>
           </Grid>
-          <Grid item xs={12} md={4} className="card-animation">
+          <Grid item xs={12} sm={6} md={4} className="card-animation">
             <FeatureCard elevation={3}>
               <Typography variant="h5" gutterBottom>
                 Medical Articles

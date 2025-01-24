@@ -1,5 +1,16 @@
 import React from "react"
-import { Container, Typography, Grid, Card, CardContent, CardMedia, CardActionArea, Box } from "@mui/material"
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material"
 import { styled } from "@mui/system"
 
 const GradientCard = styled(Card)(({ theme }) => ({
@@ -34,17 +45,25 @@ const articles = [
 ]
 
 function Articles() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }} className="page-transition">
       <Typography variant="h2" gutterBottom align="center">
         Medical Articles
       </Typography>
-      <Grid container spacing={4}>
+      <Grid container spacing={isMobile ? 2 : 4}>
         {articles.map((article) => (
           <Grid item key={article.id} xs={12} sm={6} md={4} className="card-animation">
             <GradientCard>
               <CardActionArea>
-                <CardMedia component="img" height="140" image={article.image} alt={article.title} />
+                <CardMedia
+                  component="img"
+                  height={isMobile ? "120" : "140"}
+                  image={article.image}
+                  alt={article.title}
+                />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     {article.title}

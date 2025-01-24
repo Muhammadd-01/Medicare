@@ -10,13 +10,26 @@ import {
   List,
   ListItem,
   ListItemText,
+  Paper,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material"
+import { styled } from "@mui/system"
+
+const GradientPaper = styled(Paper)(({ theme }) => ({
+  backgroundImage: "linear-gradient(120deg, #f0f8ff 0%, #e6f2ff 100%)",
+  padding: theme.spacing(3),
+  marginBottom: theme.spacing(3),
+  borderRadius: theme.spacing(2),
+}))
 
 function Symptoms() {
   const [symptoms, setSymptoms] = useState("")
   const [suggestions, setSuggestions] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -40,53 +53,55 @@ function Symptoms() {
   }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h2" gutterBottom>
+    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }} className="page-transition">
+      <Typography variant="h2" gutterBottom align="center">
         Symptom Checker
       </Typography>
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="symptoms"
-          label="Describe your symptoms"
-          name="symptoms"
-          multiline
-          rows={4}
-          value={symptoms}
-          onChange={(e) => setSymptoms(e.target.value)}
-        />
-        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
-          {loading ? <CircularProgress size={24} /> : "Get Suggestions"}
-        </Button>
-      </Box>
+      <GradientPaper elevation={3}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="symptoms"
+            label="Describe your symptoms"
+            name="symptoms"
+            multiline
+            rows={isMobile ? 3 : 4}
+            value={symptoms}
+            onChange={(e) => setSymptoms(e.target.value)}
+          />
+          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Get Suggestions"}
+          </Button>
+        </Box>
+      </GradientPaper>
       {error && (
         <Alert severity="error" sx={{ mt: 2 }}>
           {error}
         </Alert>
       )}
       {suggestions && (
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h4" gutterBottom>
+        <Box sx={{ mt: 4 }} className="card-animation">
+          <Typography variant="h4" gutterBottom align="center">
             Suggested Medicines
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" gutterBottom align="center">
             Please consult with a healthcare professional before taking any medication.
           </Typography>
           {Object.entries(suggestions).map(([severity, meds]) => (
-            <Box key={severity} sx={{ mb: 3 }}>
+            <GradientPaper key={severity} elevation={3} sx={{ mb: 2 }}>
               <Typography variant="h6" gutterBottom>
                 {severity.charAt(0).toUpperCase() + severity.slice(1)}
               </Typography>
-              <List>
+              <List dense={isMobile}>
                 {meds.map((med, index) => (
                   <ListItem key={index}>
                     <ListItemText primary={med} />
                   </ListItem>
                 ))}
               </List>
-            </Box>
+            </GradientPaper>
           ))}
         </Box>
       )}

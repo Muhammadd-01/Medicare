@@ -11,6 +11,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
 import MenuIcon from "@mui/icons-material/Menu"
 import { useAuth } from "../contexts/AuthContext"
@@ -18,10 +20,20 @@ import { useAuth } from "../contexts/AuthContext"
 function Navbar() {
   const { user, logout } = useAuth()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Symptom Checker", path: "/symptoms" },
+    { name: "Articles", path: "/articles" },
+    { name: "News", path: "/news" },
+    { name: "Contact", path: "/contact" },
+  ]
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -29,9 +41,9 @@ function Navbar() {
         MediCare
       </Typography>
       <List>
-        {["Home", "Symptom Checker", "Articles", "News", "Contact"].map((item) => (
-          <ListItem key={item} component={RouterLink} to={`/${item.toLowerCase().replace(" ", "-")}`}>
-            <ListItemText primary={item} />
+        {navItems.map((item) => (
+          <ListItem key={item.name} component={RouterLink} to={item.path}>
+            <ListItemText primary={item.name} />
           </ListItem>
         ))}
         {user ? (
@@ -61,15 +73,17 @@ function Navbar() {
     <>
       <AppBar position="static" sx={{ backgroundImage: "linear-gradient(45deg, #0066cc, #5e92f3)" }}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
+          {isMobile && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2 }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
           <Typography
             variant="h6"
             component={RouterLink}
@@ -78,42 +92,34 @@ function Navbar() {
           >
             MediCare
           </Typography>
-          <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 2 }}>
-            <Button color="inherit" component={RouterLink} to="/">
-              Home
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/symptoms">
-              Symptom Checker
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/articles">
-              Articles
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/news">
-              News
-            </Button>
-            <Button color="inherit" component={RouterLink} to="/contact">
-              Contact
-            </Button>
-            {user ? (
-              <>
-                <Button color="inherit" component={RouterLink} to="/premium">
-                  Premium Consultation
+          {!isMobile && (
+            <Box sx={{ display: "flex", gap: 2 }}>
+              {navItems.map((item) => (
+                <Button key={item.name} color="inherit" component={RouterLink} to={item.path}>
+                  {item.name}
                 </Button>
-                <Button color="inherit" onClick={logout}>
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button color="inherit" component={RouterLink} to="/login">
-                  Login
-                </Button>
-                <Button color="inherit" component={RouterLink} to="/register">
-                  Register
-                </Button>
-              </>
-            )}
-          </Box>
+              ))}
+              {user ? (
+                <>
+                  <Button color="inherit" component={RouterLink} to="/premium">
+                    Premium Consultation
+                  </Button>
+                  <Button color="inherit" onClick={logout}>
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button color="inherit" component={RouterLink} to="/login">
+                    Login
+                  </Button>
+                  <Button color="inherit" component={RouterLink} to="/register">
+                    Register
+                  </Button>
+                </>
+              )}
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -125,7 +131,7 @@ function Navbar() {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { xs: "block", md: "none" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: 240 },
           }}
         >
